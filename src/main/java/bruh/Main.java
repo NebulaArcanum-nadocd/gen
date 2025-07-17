@@ -49,7 +49,7 @@ public class Main {
             }
         }
         data.forEach((locale,depth1)->{try {
-            File output = new File("./out/index".concat(locale).concat(".html"));
+            File output = new File("./outf/index".concat(locale).concat(".html"));
             OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8);
             osw.append(header.replaceFirst("\0",locale.isEmpty()?"en":locale.substring(1)));
             depth1.forEach((type,depth2)->{try{
