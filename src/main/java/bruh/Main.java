@@ -58,7 +58,7 @@ public class Main {
                         .append("    <details class=\"type\">\n")
                         .append("        <summary>").append(capitalize(type)).append("</summary>\n");
                 depth2.forEach((id,depth3)->{try{
-                    String title=depth3.getOrDefault(id,id+"[no 'name' property]");
+                    String title=depth3.getOrDefault("name",id+"[no 'name' property]");
                 osw
                         .append("            <details class=\"content\">\n")
                         .append("                <summary>").append(title).append("</summary>\n");
