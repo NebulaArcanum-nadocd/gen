@@ -15,6 +15,7 @@ public class Main {
             header = """
             <html lang="\0">
             <head>
+                <meta charset="UTF-8">
                 <title>y r u reading ts?</title>
             </head>
             <body>
