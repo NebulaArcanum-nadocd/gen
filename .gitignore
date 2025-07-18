@@ -50,4 +50,4 @@ bin/
 /settings.gradle
 /technologium/
 .gitignore
-/.idea/
+/.idea/*

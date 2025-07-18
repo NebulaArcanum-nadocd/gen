@@ -1,10 +1,12 @@
 package bruh;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,14 +14,18 @@ import java.util.List;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     private static final String
+            root = "https://nebulaarcanum-nadocd.github.io/gen",
+            languageOption = "    <div class='option'>\0</div>\n",
             header = """
             <html lang="\0">
             <head>
                 <meta charset="UTF-8">
                 <title>y r u reading ts?</title>
+                <!--suppress HtmlUnknownTarget-->
+                <link href='mainstyle.css' rel='stylesheet'>
             </head>
             <body>
-            <h1>Content</h1>
+            <div class='title'>Content</div>
             """,
             ending= """
             </body>
@@ -46,23 +52,26 @@ public class Main {
                         .computeIfAbsent(localeStr, k -> new HashMap<>())
                         .computeIfAbsent(type, k -> new HashMap<>())
                         .computeIfAbsent(id, k -> new HashMap<>())
-                        .putIfAbsent(property,value.replaceAll("[<>]","[T]").replace("\\n","\n"));
+                        .putIfAbsent(capitalize(property),value.replaceAll("[<>]","[T]").replace("\\n","\n"));
             }
         }
+        ArrayList<String> localesStr = new ArrayList<>(locales.length);
         data.forEach((locale,depth1)->{try {
-            File output = new File("./outf/index".concat(locale).concat(".html"));
+            String visualLocale = locale.isEmpty() ? "en" : locale.substring(1);
+            File output = new File("./outf/index_".concat(visualLocale).concat(".html"));
             OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8);
-            osw.append(header.replaceFirst("\0",locale.isEmpty()?"en":locale.substring(1)));
+            localesStr.add(visualLocale);
+            osw.append(header.replaceFirst("\0", visualLocale));
             depth1.forEach((type,depth2)->{try{
                 osw
                         .append("    <details class=\"type\">\n")
                         .append("        <summary>").append(capitalize(type)).append("</summary>\n");
                 depth2.forEach((id,depth3)->{try{
-                    String title=depth3.getOrDefault("name",id+"[no 'name' property]");
+                    String title=depth3.getOrDefault("Name",id+"[no 'name' property]");
                 osw
                         .append("            <details class=\"content\">\n")
                         .append("                <summary>").append(title).append("</summary>\n");
-                    depth3.forEach((prop,value)->{if(prop.equals("name"))return;try{
+                    depth3.forEach((prop,value)->{if(prop.equals("Name"))return;try{
                 osw
                         .append("                    <div class=\"container\">\n")
                         .append("                        <div class=\"property\">").append(prop).append("</div>\n")
@@ -78,6 +87,29 @@ public class Main {
             osw.flush();
             osw.close();
         }catch(Throwable th){throw new RuntimeException(th);}});
+        StringBuilder sb = new StringBuilder();
+        for (String localeStr : localesStr) {
+            sb.append(languageOption.replaceFirst("\0",localeStr));
+        }
+        File index = new File("./index.html");
+        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(index));
+        osw.append("""
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <title>lang selector</title>
+                    <!--suppress HtmlUnknownTarget -->
+                    <link href='outf/mainstyle.css'>
+                </head>
+                <body>
+                    <h1>Select language</h1>
+                \0</body>
+                </html>""".replaceFirst("\0",sb.toString())).flush();
+        osw.close();
+        new Color(0x35030B);
+        new Color(0x190101);
+        new Color(0x8c1225);
+        new Color(0xe8803f);
     }
     //HM<Locale,HM<Type,HM<ID,HM<Property,Value>>>>
     static HashMap<String,HashMap<String,HashMap<String,HashMap<String,String>>>> data=new HashMap<>();

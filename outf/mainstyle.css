@@ -1,0 +1,32 @@
+html {
+  min-height: 100vh;
+  background: linear-gradient(#35030B,#190101);
+  font-family: 'JetBrains Mono';
+  color: #e8803f;
+  -webkit-transition-duration: 0.3s;
+  left: 0;
+}
+details {
+  margin-left: 20px;
+}
+.type {
+  margin: 0;
+}
+.container {
+  margin-left: 20;
+}
+.value {
+  margin-left: 15;
+}
+details > summary {
+  list-style-type: '[+] ';
+  opacity: 0.5;
+}
+details[open] > summary {
+  list-style-type: '[-] ';
+  opacity: 1;
+  
+}
+summary:hover {
+  opacity: .8;
+}
